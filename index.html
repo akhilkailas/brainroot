@@ -540,63 +540,6 @@
     document.getElementById('mainNav').style.boxShadow = window.scrollY>60
       ? '0 4px 24px rgba(91,31,166,.15)' : '0 2px 20px rgba(91,31,166,.08)';
   });
-
-  // Form submission
-  function submitForm(){
-    const name  = document.getElementById('f_name').value.trim();
-    const phone = document.getElementById('f_phone').value.trim();
-    const email = document.getElementById('f_email').value.trim();
-    const prog  = document.getElementById('f_prog').value;
-    const child = document.getElementById('f_child').value.trim();
-    const age   = document.getElementById('f_age').value.trim();
-    const msg   = document.getElementById('f_msg').value.trim();
-    const errEl = document.getElementById('fError');
-    const okEl  = document.getElementById('fSuccess');
-
-    errEl.style.display='none'; okEl.style.display='none';
-
-    if(!name||!phone||!email||!prog){
-      errEl.textContent='⚠️ Please fill in Name, Phone, Email and select a Program.';
-      errEl.style.display='block'; return;
-    }
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      errEl.textContent='⚠️ Please enter a valid email address.';
-      errEl.style.display='block'; return;
-    }
-
-    const btn = document.querySelector('.fsub');
-    btn.textContent='⏳ Sending...'; btn.disabled=true;
-
-    const params = {
-      from_name: name, phone, email,
-      child_name: child||'N/A', age: age||'N/A',
-      program: prog, message: msg||'None',
-      to_email: MY_EMAIL
-    };
-
-    // If EmailJS not configured yet → fallback to WhatsApp
-    if(EJS_SVC==='YOUR_SERVICE_ID'){
-      const t=`Hello Brain Root!\n\n*Demo Booking*\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n${child?'Child: '+child+'\n':''}${age?'Age: '+age+'\n':''}Program: ${prog}\n${msg?'Msg: '+msg:''}`;
-      window.open('https://wa.me/919344133195?text='+encodeURIComponent(t),'_blank');
-      okEl.style.display='block';
-      btn.textContent='🎓 Book My Free Demo Class'; btn.disabled=false;
-      return;
-    }
-
-    emailjs.init(EJS_KEY);
-    emailjs.send(EJS_SVC, EJS_TPL, params)
-      .then(()=>{
-        okEl.style.display='block';
-        ['f_name','f_phone','f_email','f_child','f_age','f_msg'].forEach(id=>document.getElementById(id).value='');
-        document.getElementById('f_prog').value='';
-        btn.textContent='🎓 Book My Free Demo Class'; btn.disabled=false;
-      })
-      .catch(()=>{
-        errEl.textContent='❌ Could not send. Please call us: +91 93441 33195 or WhatsApp.';
-        errEl.style.display='block';
-        btn.textContent='🎓 Book My Free Demo Class'; btn.disabled=false;
-      });
-  }
 </script>
 
 
